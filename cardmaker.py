@@ -16,6 +16,10 @@ style = """
 .kanji {
  font-size: 40px;
 }
+.type {
+ font-size: 10px;
+ font-style: italic;
+}
 .pos {
  font-size: 10px;
  font-style: italic;
@@ -36,11 +40,11 @@ rb, rt {
 model_gen    = random.Random(0)
 
 kanji_fields    = [{'name': 'Question'}, {'name': 'Answer'},]
-kanji_templates = [{'name': 'Kanji card', 'qfmt': '<p class="kanji">{{Question}}</p>', 'afmt': '{{FrontSide}}<hr id="answer">{{Answer}}',},]
+kanji_templates = [{'name': 'Kanji card', 'qfmt': '<p class="type">Kanji</p><p class="kanji">{{Question}}</p>', 'afmt': '{{FrontSide}}<hr id="answer">{{Answer}}',},]
 kanji_model     = genanki.Model(model_gen.randrange(1 << 30, 1 << 31), 'Kanji note model', fields=kanji_fields, templates=kanji_templates, css=style)
 
 vocab_fields    = [{'name': 'KanjiFormFuriganized'}, {'name': 'KanaForm'}, {'name':'Meanings'}, {'name': 'Pitch'}]
-vocab_templates = [{'name': 'Recognition', 'qfmt': '<p class="kanji">{{KanjiFormFuriganized}}</p>', 'afmt': '{{FrontSide}}<hr id="answer">{{KanaForm}}<br>{{Meanings}}<div class=pitchbox>{{Pitch}}</div>',}, {'name': 'Recall', 'qfmt': '<p>{{Meanings}}</p>', 'afmt': '{{FrontSide}}<hr id="answer"><p class="kanji">{{KanjiFormFuriganized}}</p>{{KanaForm}}<div class=pitchbox>{{Pitch}}</div>',}]
+vocab_templates = [{'name': 'Recognition', 'qfmt': '<p class="type">Vocabulary</p><p class="kanji">{{KanjiFormFuriganized}}</p>', 'afmt': '{{FrontSide}}<hr id="answer">{{KanaForm}}<br>{{Meanings}}<div class=pitchbox>{{Pitch}}</div>',}, {'name': 'Recall', 'qfmt': '<p class="type">Vocabulary</p><p>{{Meanings}}</p>', 'afmt': '{{FrontSide}}<hr id="answer"><p class="kanji">{{KanjiFormFuriganized}}</p>{{KanaForm}}<div class=pitchbox>{{Pitch}}</div>',}]
 vocab_model     = genanki.Model(model_gen.randrange(1 << 30, 1 << 31), 'Vocab note model', fields=vocab_fields, templates=vocab_templates, css=style)
 
 
@@ -59,8 +63,6 @@ except TypeError as exc:
     quit()
 
 deck = genanki.Deck(deck_id, deck_name)
-
-print(deck_name)
 
 notes = []
 

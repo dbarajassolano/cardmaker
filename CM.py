@@ -20,17 +20,22 @@ def get_N5kanji():
 
 class KanjiEntry:
 
-    def __init__(self, prompt):
+    def __init__(self, prompt, query_idx=0):
         self.prompt = prompt
-        self.kanjidic_char = self.choose_kanjidic_char()
+        self.kanjidic_char = self.choose_kanjidic_char(query_idx)
 
-    def choose_kanjidic_char(self):
+    def choose_kanjidic_char(self, query_idx):
         result = jam.lookup(self.prompt)
         if result.chars == []:
             print('Found nothing')
             return None
         for idx in range(len(result.chars)):
             print(f'[{idx + 1}] {result.chars[idx].__repr__()}')
+        if query_idx <= 0 or query_idx > len(result.chars):
+            print('Invalid index')
+            return None
+        if not query_idx == 0:
+            return result.chars[query_idx - 1]
         cancel_flag = False
         while cancel_flag == False:
             command = input('> ? [{:d}-{:d}/no] (1) '.format(1, len(result.chars)))
@@ -82,17 +87,22 @@ class KanjiNote:
 
 class VocabEntry:
     
-    def __init__(self, prompt):
+    def __init__(self, prompt, query_idx=0):
         self.prompt = prompt
-        self.jmdict_entry = self.choose_jmdict_entry()
+        self.jmdict_entry = self.choose_jmdict_entry(query_idx)
         
-    def choose_jmdict_entry(self):
+    def choose_jmdict_entry(self, query_idx):
         result = jam.lookup(self.prompt)
         if result.entries == []:
             print('Found nothing')
             return None
         for idx in range(len(result.entries)):
             self.print_jmdict_entry(idx + 1, result.entries[idx])
+        if query_idx <= 0 or query_idx > len(result.chars):
+            print('Invalid index')
+            return None
+        if not query_idx == 0:
+            return result.entries[query_idx - 1]
         cancel_flag = False
         while cancel_flag == False:
             command = input('> ? [{:d}-{:d}/no] (1) '.format(1, len(result.entries)))
@@ -193,7 +203,7 @@ class FuriganaForm:
         self.data = self.furiganize()
 
     def furiganize(self):
-        furigana_data = next((data for data in self.jmdict_furigana if data["text"] == self.kanji_form), None)
+        furigana_data = next((data for data in self.jmdict_furigana if data["text"] == self.kanji_form and data["reading"] == self.kana_form), None)
         if furigana_data == None:
             print('Couldn''t find furigana data')
             return [{'ruby': self.kanji_form, 'rt' : self.kana_form}]
