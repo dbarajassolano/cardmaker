@@ -1,6 +1,8 @@
 # Emacs stuff
 *~
 
+__pycache__
+
 # Data
 JmdictFurigana.json
 jlpt_kanji_level_*_base.txt
