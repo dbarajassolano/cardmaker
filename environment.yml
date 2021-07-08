@@ -1,0 +1,10 @@
+name: anki
+dependencies:
+  - python=3.8.*
+  - jupyterlab
+  - pip
+  - pip:
+    - genanki
+    - jamdict
+    - jamdict-data
+    

@@ -31,7 +31,7 @@ class KanjiEntry:
             return None
         for idx in range(len(result.chars)):
             print(f'[{idx + 1}] {result.chars[idx].__repr__()}')
-        if query_idx <= 0 or query_idx > len(result.chars):
+        if query_idx < 0 or query_idx > len(result.chars):
             print('Invalid index')
             return None
         if not query_idx == 0:
@@ -98,7 +98,7 @@ class VocabEntry:
             return None
         for idx in range(len(result.entries)):
             self.print_jmdict_entry(idx + 1, result.entries[idx])
-        if query_idx <= 0 or query_idx > len(result.chars):
+        if query_idx < 0 or query_idx > len(result.entries):
             print('Invalid index')
             return None
         if not query_idx == 0:
@@ -182,7 +182,7 @@ class VocabNote:
         patt = aap.get_acc_patt(kf, self.kana_form, [self.acc_dict])
         if not patt:
             print(f'Couldn\'t find data in the pitch database for expression {self.kanji_form}')
-            return None
+            return ''
         hira, LlHh_patt = patt
         LH_patt = re.sub(r'[lh]', '', LlHh_patt)
         svg = aap.pitch_svg(hira, LH_patt)
