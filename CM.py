@@ -1,6 +1,5 @@
 from jamdict import Jamdict
 import anki_add_pitch.anki_add_pitch as aap
-from anki_add_pitch.draw_pitch import pitch_svg
 import re
 import json
 import csv
@@ -52,7 +51,7 @@ class KanjiEntry:
                 print('Please try again')
 
     def __str__(self):
-        return self.kanjidic_char.__repr__()
+        return repr(self.kanjidic_char)
 
 class KanjiNote:
 
@@ -61,10 +60,8 @@ class KanjiNote:
         self.char         = char
         self.literal      = self.char.kanjidic_char.literal
         self.meanings     = ', '.join(self.char.kanjidic_char.meanings(english_only=True))
-        self.on_readings  = self.on_readings()
-        self.kun_readings = self.kun_readings()
         self.question     = self.literal
-        self.answer       = f'On\'yomi {self.on_readings}<br>Kun\'yomi {self.kun_readings}<br>{self.meanings}'
+        self.answer       = f'On\'yomi {self.on_readings()}<br>Kun\'yomi {self.kun_readings()}<br>{self.meanings}'
 
     def on_readings(self):
         tmp = []
@@ -79,10 +76,10 @@ class KanjiNote:
         return ', '.join(tmp)
 
     def __str__(self):
-        return f'Literal:\t{self.literal}\nMeanings:\t{self.meanings}\nOn\'yomi:\t{self.on_readings}\nKun\'yomi:\t{self.kun_readings}\nHTML:\t\t{self.question}<hr id="answer">{self.answer}'
+        return f'Literal:\t{self.literal}\nMeanings:\t{self.meanings}\nOn\'yomi:\t{self.on_readings()}\nKun\'yomi:\t{self.kun_readings()}\nHTML:\t\t{self.question}<hr id="answer">{self.answer}'
 
     def short(self):
-        return f'{self.char.kanjidic_char.__repr__()}'
+        return f'{repr(self.char.kanjidic_char)}'
     
 
 class VocabEntry:
@@ -135,7 +132,7 @@ class VocabEntry:
         print(' '.join(tmp))
 
     def __str__(self):
-        return self.jmdict_entry.__str__()
+        return str(self.jmdict_entry)
     
 class VocabNote:
 
@@ -208,10 +205,8 @@ class FuriganaForm:
             print('Couldn''t find furigana data')
             return [{'ruby': self.kanji_form, 'rt' : self.kana_form}]
         else:
-            ndata = len(furigana_data['furigana'])
-            data  = [None] * ndata
-            for idx in range(ndata):
-                data[idx] = furigana_data['furigana'][idx]
+            data = furigana_data['furigana']
+            for idx in range(len(data)):
                 ruby = data[idx]['ruby']
                 if 'rt' in data[idx]:
                     if (all(s in self.N5kanji for s in ruby)):

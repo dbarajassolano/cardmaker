@@ -125,16 +125,18 @@ if __name__ == '__main__':
         else:
             # Determine if you want to edit a note
             replace_idx = None
-            if edit_pattern.search(command):
+            res = edit_pattern.search(command)
+            if res:
                 replace_idx = int(re.findall("[0-9]+", command)[0]) - 1
                 if replace_idx >= len(notes):
                     print(f'Invalid note number (Valid: 1-{len(notes)})')
                     continue
                 command = input('> New search? ')
                 command = command.encode('utf-8', 'replace').decode()
-            if char_pattern.search(command):
-                # Kanji chard
-                char = KanjiEntry(char_pattern.search(command).groups()[0])
+            res = char_pattern.search(command)
+            if res:
+                # Kanji note
+                char = KanjiEntry(res.groups()[0])
                 if char.kanjidic_char == None:
                     continue
                 note = KanjiNote(char)
