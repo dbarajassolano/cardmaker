@@ -1,12 +1,12 @@
 # Emacs stuff
 *~
+.dir-locals.el
 
 __pycache__
 .ipynb_checkpoints
 
 # Data
 JmdictFurigana.json
-jlpt_kanji_level_*_base.txt
 
 # Output
 *.apkg

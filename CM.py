@@ -206,11 +206,6 @@ class FuriganaForm:
             return [{'ruby': self.kanji_form, 'rt' : self.kana_form}]
         else:
             data = furigana_data['furigana']
-            for idx in range(len(data)):
-                ruby = data[idx]['ruby']
-                if 'rt' in data[idx]:
-                    if (all(s in self.N5kanji for s in ruby)):
-                        data[idx].pop('rt', None) # Delete 'rt' from furigana data because all kanji are JLPT-N5
         return data
 
     def __str__(self):

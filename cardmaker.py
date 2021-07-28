@@ -35,6 +35,16 @@ rb, rt {
   display: inline;
   line-height: 1;
 }
+#demo {
+	display:none;
+}
+#demo:checked + label ruby rt {
+	visibility: visible; 
+}
+.furihide ruby rt { 
+	visibility: hidden; 
+}
+
 """
 
 model_gen    = random.Random(0)
@@ -44,7 +54,7 @@ kanji_templates = [{'name': 'Kanji card', 'qfmt': '<p class="type">Kanji</p><p c
 kanji_model     = genanki.Model(model_gen.randrange(1 << 30, 1 << 31), 'Kanji note model', fields=kanji_fields, templates=kanji_templates, css=style)
 
 vocab_fields    = [{'name': 'KanjiFormFuriganized'}, {'name': 'KanaForm'}, {'name':'Meanings'}, {'name': 'Pitch'}]
-vocab_templates = [{'name': 'Recognition', 'qfmt': '<p class="type">Vocabulary</p><p class="kanji">{{KanjiFormFuriganized}}</p>', 'afmt': '{{FrontSide}}<hr id="answer">{{KanaForm}}<br>{{Meanings}}<div class=pitchbox>{{Pitch}}</div>',}, {'name': 'Recall', 'qfmt': '<p class="type">Vocabulary</p><p>{{Meanings}}</p>', 'afmt': '{{FrontSide}}<hr id="answer"><p class="kanji">{{KanjiFormFuriganized}}</p>{{KanaForm}}<div class=pitchbox>{{Pitch}}</div>',}]
+vocab_templates = [{'name': 'Recognition', 'qfmt': '<p class="type">Vocabulary</p><div class="kanji furihide"><input type="checkbox" id="demo"/><label for="demo">{{KanjiFormFuriganized}}</label></div>', 'afmt': '<p class="type">Vocabulary</p><div class="kanji">{{KanjiFormFuriganized}}</div><hr id="answer">{{Meanings}}<div class=pitchbox>{{Pitch}}</div>',}, {'name': 'Recall', 'qfmt': '<p class="type">Vocabulary</p><p>{{Meanings}}</p>', 'afmt': '{{FrontSide}}<hr id="answer"><div class="kanji">{{KanjiFormFuriganized}}</div><div class=pitchbox>{{Pitch}}</div>',}]
 vocab_model     = genanki.Model(model_gen.randrange(1 << 30, 1 << 31), 'Vocab note model', fields=vocab_fields, templates=vocab_templates, css=style)
 
 
@@ -66,9 +76,9 @@ deck = genanki.Deck(deck_id, deck_name)
 
 notes = []
 
-edit_pattern   = re.compile(r'^edit [0-9]+$')
-delete_pattern = re.compile(r'^delete [0-9]+$')
-char_pattern   = re.compile(r'^char (.*)')
+edit_pattern   = re.compile(r'^edit[\s][0-9]+$')
+delete_pattern = re.compile(r'^delete[\s][0-9]+$')
+char_pattern   = re.compile(r'^char[\s](.*)')
 
 if __name__ == '__main__':
 
