@@ -11,12 +11,6 @@ def get_jmdict_furigana():
         jmdict_furigana = json.load(jsonfile)
     return jmdict_furigana
 
-def get_N5kanji():
-    with open('jlpt_kanji_level_5_base.txt') as csvfile:
-        reader = csv.reader(csvfile, skipinitialspace=True)
-        N5kanji = [row[0][0] for row in reader]
-    return N5kanji
-
 class KanjiEntry:
 
     def __init__(self, prompt, query_idx=0):
@@ -192,7 +186,6 @@ class VocabNote:
 class FuriganaForm:
 
     jmdict_furigana = get_jmdict_furigana()
-    N5kanji = get_N5kanji()
     
     def __init__(self, kanji_form, kana_form):
         self.kana_form  = kana_form

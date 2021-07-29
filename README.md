@@ -21,7 +21,7 @@ For `char` (kanji) queries, the corresponding card has the kanji at the front an
 
 ## Vocabulary queries
 
-For vocabulary entry queries, corresponding recognition and recall cards are created. The kanji form is furiganized using the [JmdictFurigana project](https://github.com/Doublevil/JmdictFurigana)'s furigana information, but with a caveat: N5 kanji are *not* furiganized (You're supposed to be memorizing those!)
+For vocabulary entry queries, corresponding recognition and recall cards are created. Furigana is obtained from the [JmdictFurigana project](https://github.com/Doublevil/JmdictFurigana). For recognition cards, you can tap on the kanji form to show the furigana (inspired by [this repo](https://github.com/coolmule0/JLPT-N5-N1-Japanese-Vocabulary-Anki)).
 
 ### Example
 
@@ -35,5 +35,5 @@ For vocabulary entry queries, corresponding recognition and recall cards are cre
 
 - [Jamdict](https://github.com/neocl/jamdict)
 - [genanki](https://github.com/kerrickstaley/genanki)
-- [The latest JmdictFurigana file](https://github.com/Doublevil/JmdictFurigana/releases/latest)
-- [Jonathan Waller's list of N5 kanji](http://www.tanos.co.uk/jlpt/jlpt5/kanji/jlpt_kanji_level_5_base.zip). It must be renamed from `jlpt_kanji_level_4_base.txt` to `jlpt_kanji_level_5_base.txt`. No idea about that `4` there...
+- [The latest JmdictFurigana file](https://github.com/Doublevil/JmdictFurigana/releases/latest). You can download it by doing `bash get_JmdictFurigana.sh`.
+
