@@ -1,11 +1,15 @@
+# macOS stuff
+.DS_Store
+
 # Emacs stuff
 *~
 .dir-locals.el
+*#
 
 __pycache__
 .ipynb_checkpoints
 
-# Data
+# Furigana data
 JmdictFurigana.json
 
 # Output
@@ -13,3 +17,9 @@ JmdictFurigana.json
 
 # Jupyter tests
 *.ipynb
+
+# KanjiVG
+kanji
+*.zip
+*.gz
+*.xml

@@ -2,6 +2,7 @@ name: anki
 dependencies:
   - python=3.8.*
   - jupyterlab
+  - lxml
   - pip
   - pip:
     - genanki

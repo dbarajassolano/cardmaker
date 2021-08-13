@@ -2,7 +2,7 @@ from jamdict import Jamdict
 import anki_add_pitch.anki_add_pitch as aap
 import re
 import json
-import csv
+from lxml import etree as ET
 
 jam = Jamdict()
 
@@ -56,6 +56,7 @@ class KanjiNote:
         self.meanings     = ', '.join(self.char.kanjidic_char.meanings(english_only=True))
         self.question     = self.literal
         self.answer       = f'On\'yomi {self.on_readings()}<br>Kun\'yomi {self.kun_readings()}<br>{self.meanings}'
+        self.kanjivg      = self.get_kanjivg()
 
     def on_readings(self):
         tmp = []
@@ -68,6 +69,20 @@ class KanjiNote:
         for rm in self.char.kanjidic_char.rm_groups:
             tmp.append(', '.join(reading.value for reading in rm.kun_readings))
         return ', '.join(tmp)
+
+    def get_kanjivg(self):
+        tree = ET.parse("kanjivg-20160426.xml")
+        id = tree.xpath("//g[@kvg:element = '{:s}']/@id".format(self.literal), namespaces={'kvg':'http://kanjivg.tagaini.net'})
+        id = next((i for (x, i) in zip([ix.find('-') for ix in id], id) if x < 0), None)
+        if id:
+            filesvg = 'kanji/' + id[4:] + '.svg'
+            with open(filesvg, "r") as myfile:
+                data = myfile.read()
+                data = data[data.find('<svg'):].replace('\n', '').replace('xmlns="http://www.w3.org/2000/svg" ', '').replace('kvg:', '')
+                return data
+        else:
+            print(f'Couldn\'t find stroke order data for kanji {self.literal}')
+            return ''
 
     def __str__(self):
         return f'Literal:\t{self.literal}\nMeanings:\t{self.meanings}\nOn\'yomi:\t{self.on_readings()}\nKun\'yomi:\t{self.kun_readings()}\nHTML:\t\t{self.question}<hr id="answer">{self.answer}'

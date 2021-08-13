@@ -3,6 +3,7 @@ import genanki
 import random
 import re
 import argparse
+import html
 
 saved_to_collection = False
 exit_flag = False
@@ -49,8 +50,8 @@ rb, rt {
 
 model_gen    = random.Random(0)
 
-kanji_fields    = [{'name': 'Question'}, {'name': 'Answer'},]
-kanji_templates = [{'name': 'Kanji card', 'qfmt': '<p class="type">Kanji</p><p class="kanji">{{Question}}</p>', 'afmt': '{{FrontSide}}<hr id="answer">{{Answer}}',},]
+kanji_fields    = [{'name': 'Question'}, {'name': 'Answer'}, {'name': 'KanjiVG'}]
+kanji_templates = [{'name': 'Kanji card', 'qfmt': '<p class="type">Kanji</p><p class="kanji">{{Question}}</p>', 'afmt': '{{FrontSide}}<hr id="answer">{{Answer}}<div class=pitchbox>{{KanjiVG}}</div>',},]
 kanji_model     = genanki.Model(model_gen.randrange(1 << 30, 1 << 31), 'Kanji note model', fields=kanji_fields, templates=kanji_templates, css=style)
 
 vocab_fields    = [{'name': 'KanjiFormFuriganized'}, {'name': 'KanaForm'}, {'name':'Meanings'}, {'name': 'Pitch'}]
@@ -113,7 +114,7 @@ if __name__ == '__main__':
             else:
                 for note in notes:
                     if note.is_kanjinote:
-                        note = genanki.Note(model=kanji_model, fields=[note.question, note.answer])
+                        note = genanki.Note(model=kanji_model, fields=[note.question, note.answer, note.kanjivg])
                     else:
                         note = genanki.Note(model=vocab_model, fields=[note.kanji_form_furiganized, note.kana_form, note.meanings, note.pitch_svg])
                     deck.add_note(note)
