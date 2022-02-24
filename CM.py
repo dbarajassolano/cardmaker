@@ -3,6 +3,7 @@ import anki_add_pitch.anki_add_pitch as aap
 import re
 import json
 from lxml import etree as ET
+from pathlib import Path
 
 jam = Jamdict()
 
@@ -76,6 +77,7 @@ class KanjiNote:
         id = next((i for (x, i) in zip([ix.find('-') for ix in id], id) if x < 0), None)
         if id:
             filesvg = 'kanji/' + id[4:] + '.svg'
+            filesvg = Path(__file__).parent / filesvg
             with open(filesvg, "r") as myfile:
                 data = myfile.read()
                 data = data[data.find('<svg'):].replace('\n', '').replace('xmlns="http://www.w3.org/2000/svg" ', '').replace('kvg:', '')
@@ -145,7 +147,8 @@ class VocabEntry:
     
 class VocabNote:
 
-    acc_dict = aap.get_accent_dict('anki_add_pitch/wadoku_pitchdb.csv')
+    acc_dict_path = Path(__file__).parent / 'anki_add_pitch/wadoku_pitchdb.csv'
+    acc_dict = aap.get_accent_dict(acc_dict_path)
 
     def __init__(self, entry):
         self.is_kanjinote = False
