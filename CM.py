@@ -8,7 +8,7 @@ from pathlib import Path
 jam = Jamdict()
 
 def get_jmdict_furigana():
-    with open('JmdictFurigana.json', 'r', encoding='utf-8-sig') as jsonfile:
+    with open(Path(__file__).parent / 'JmdictFurigana.json', 'r', encoding='utf-8-sig') as jsonfile:
         jmdict_furigana = json.load(jsonfile)
     return jmdict_furigana
 
@@ -72,7 +72,8 @@ class KanjiNote:
         return ', '.join(tmp)
 
     def get_kanjivg(self):
-        tree = ET.parse("kanjivg-20160426.xml")
+        # PosixPath to str
+        tree = ET.parse(str(Path(__file__).parent / "kanjivg-20160426.xml"))
         id = tree.xpath("//g[@kvg:element = '{:s}']/@id".format(self.literal), namespaces={'kvg':'http://kanjivg.tagaini.net'})
         id = next((i for (x, i) in zip([ix.find('-') for ix in id], id) if x < 0), None)
         if id:
