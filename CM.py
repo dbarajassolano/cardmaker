@@ -2,7 +2,7 @@ from __future__ import annotations
 from jamdict import Jamdict
 from lxml import etree as ET
 from pathlib import Path
-from typing import Optional, TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING, List
 import anki_add_pitch.anki_add_pitch as aap
 import re
 import json
@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 jam = Jamdict()
 
-def get_jmdict_furigana() -> list:
+def get_jmdict_furigana() -> List[dict]:
     """Read JmdictFurigana.json into a list of dicts."""
     with open(Path(__file__).parent / 'JmdictFurigana.json', 'r', encoding='utf-8-sig') as jsonfile:
         jmdict_furigana = json.load(jsonfile)
@@ -203,7 +203,7 @@ class FuriganaForm:
         self.kanji_form = kanji_form
         self.data = self.furiganize()
 
-    def furiganize(self) -> list:
+    def furiganize(self) -> List[dict]:
         furigana_data = next((data for data in self.jmdict_furigana if data["text"] == self.kanji_form and data["reading"] == self.kana_form), None)
         if furigana_data == None:
             print('Couldn''t find furigana data')
