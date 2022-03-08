@@ -1,12 +1,10 @@
-from CM import VocabEntry, VocabNote, KanjiEntry, KanjiNote
+from CM import VocabNote, KanjiNote, get_char, get_entry
+from pathvalidate.argparse import validate_filepath_arg
 import genanki
 import random
 import re
 import argparse
-import html
-
-saved_to_collection = False
-exit_flag = False
+import yaml
 
 deck_id      = random.randrange(1 << 30, 1 << 31)
 style = """
@@ -58,31 +56,47 @@ vocab_fields    = [{'name': 'KanjiFormFuriganized'}, {'name': 'KanaForm'}, {'nam
 vocab_templates = [{'name': 'Recognition', 'qfmt': '<p class="type">Vocabulary</p><div class="kanji furihide"><input type="checkbox" id="demo"/><label for="demo">{{KanjiFormFuriganized}}</label></div>', 'afmt': '<p class="type">Vocabulary</p><div class="kanji">{{KanjiFormFuriganized}}</div><hr id="answer">{{Meanings}}<div class=pitchbox>{{Pitch}}</div>',}, {'name': 'Recall', 'qfmt': '<p class="type">Vocabulary</p><p>{{Meanings}}</p>', 'afmt': '{{FrontSide}}<hr id="answer"><div class="kanji">{{KanjiFormFuriganized}}</div><div class=pitchbox>{{Pitch}}</div>',}]
 vocab_model     = genanki.Model(model_gen.randrange(1 << 30, 1 << 31), 'Vocab note model', fields=vocab_fields, templates=vocab_templates, css=style)
 
-
-parser = argparse.ArgumentParser(description='Make Anki cards from JMDict/KanjiDic2 searches')
-parser.add_argument('collection', metavar='C', type=str, nargs=1, help='Collection filename')
-parser.add_argument('--deck', dest='deck_name', action='store', type=str, nargs='?', default='CardMaker deck', const='CardMaker deck', help='Deck name')
-args = parser.parse_args()
-outfile = args.collection[0]
-deck_name = args.deck_name
-try:
-    if not isinstance(outfile, str) or not outfile:
-        print('Invalid output file name')
-        quit()
-except TypeError as exc:
-    print('Invalid output file name')
-    quit()
-
-deck = genanki.Deck(deck_id, deck_name)
-
-notes = []
-
 edit_pattern   = re.compile(r'^edit[\s][0-9]+$')
 delete_pattern = re.compile(r'^delete[\s][0-9]+$')
 char_pattern   = re.compile(r'^char[\s](.*)')
 
-if __name__ == '__main__':
+def main() -> None:
 
+    parser = argparse.ArgumentParser(description='Make Anki cards from JMDict/KanjiDic2 searches')
+    parser.add_argument('collection', metavar='C', type=validate_filepath_arg, help='Collection filename')
+    parser.add_argument('--deck', dest='deck_name', action='store', type=str, nargs='?', default='CardMaker deck', const='CardMaker deck', help='Deck name')
+    parser.add_argument('--yaml', dest='yaml_input', type=argparse.FileType('r', encoding='utf-16'), nargs='?', default=None, help='YAML input file')
+    args = parser.parse_args()
+    outfile   = args.collection
+    deck_name = args.deck_name
+
+    deck = genanki.Deck(deck_id, deck_name)
+
+    notes = []
+    
+    saved_to_collection = False
+    exit_flag = False
+    
+    # Receive queries from YAML file
+    if args.yaml_input:
+        queries = yaml.safe_load(args.yaml_input)
+        for query in queries:
+            if query['type'] == 'kanji':
+                char = get_char(query['string'])
+                if char == None:
+                    continue
+                note = KanjiNote(char)
+                notes.append(note)
+                print(f'\n{notes[-1]}\n')
+            elif query['type'] == 'vocab':
+                entry = get_entry(query['string'])
+                if entry == None:
+                    continue
+                note = VocabNote(entry)
+                notes.append(note)
+                print(f'\n{notes[-1]}\n')
+
+    # Receive queries from the command line
     while exit_flag == False:
     
         command = input('> ? ')
@@ -147,14 +161,14 @@ if __name__ == '__main__':
             res = char_pattern.search(command)
             if res:
                 # Kanji note
-                char = KanjiEntry(res.groups()[0])
-                if char.kanjidic_char == None:
+                char = get_char(res.groups()[0])
+                if char == None:
                     continue
                 note = KanjiNote(char)
             else:
                 # Vocabulary note
-                entry = VocabEntry(command)
-                if entry.jmdict_entry == None:
+                entry = get_entry(command)
+                if entry == None:
                     continue
                 note = VocabNote(entry)
             # Replace existing note
@@ -166,5 +180,6 @@ if __name__ == '__main__':
                 notes.append(note)
                 print(f'\n{notes[-1]}\n')
 
+if __name__ == '__main__':
+    main()
 
-quit()
