@@ -65,7 +65,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description='Make Anki cards from JMDict/KanjiDic2 searches')
     parser.add_argument('collection', metavar='C', type=validate_filepath_arg, help='Collection filename')
     parser.add_argument('--deck', dest='deck_name', action='store', type=str, nargs='?', default='CardMaker deck', const='CardMaker deck', help='Deck name')
-    parser.add_argument('--yaml', dest='yaml_input', type=argparse.FileType('r', encoding='utf-16'), nargs='?', default=None, help='YAML input file')
+    parser.add_argument('--yaml', dest='yaml_input', type=argparse.FileType('r', encoding='utf-8'), nargs='?', default=None, help='YAML input file')
     args = parser.parse_args()
     outfile   = args.collection
     deck_name = args.deck_name
