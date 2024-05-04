@@ -119,7 +119,7 @@ class KanjiNote:
 
     def get_kanjivg(self) -> str:
         # PosixPath to str
-        tree = ET.parse(str(Path(__file__).parent / "kanjivg-20160426.xml"))
+        tree = ET.parse(str(Path(__file__).parent / "kanjivg-20230110.xml"))
         id = tree.xpath("//g[@kvg:element = '{:s}']/@id".format(self.literal), namespaces={'kvg':'http://kanjivg.tagaini.net'})
         id = next((i for (x, i) in zip([ix.find('-') for ix in id], id) if x < 0), None)
         if id:

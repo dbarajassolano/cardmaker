@@ -36,4 +36,5 @@ For vocabulary entry queries, corresponding recognition and recall cards are cre
 - [Jamdict](https://github.com/neocl/jamdict)
 - [genanki](https://github.com/kerrickstaley/genanki)
 - [The latest JmdictFurigana file](https://github.com/Doublevil/JmdictFurigana/releases/latest). You can download it by doing `bash get_JmdictFurigana.sh`.
+- [The latest KanjiVG](https://github.com/KanjiVG/kanjivg/releases/latest)
 

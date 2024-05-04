@@ -77,8 +77,8 @@ def get_acc_patt(expr_field, reading_field, dicts):
             except ValueError:
                 continue
         return best
-    expr_field = expr_field.replace('[\d]', '')
-    expr_field = expr_field.replace('[^\d]', '')
+    expr_field = expr_field.replace(r'[\d]', '')
+    expr_field = expr_field.replace(r'[^\d]', '')
     expr_field = expr_field.strip()
     for dic in dicts:
         patts = dic.get(expr_field, False)
